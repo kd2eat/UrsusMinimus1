@@ -277,7 +277,10 @@
 // Here we set some regional frequencies:
 
 #define RADIO_FREQUENCY_REGION1      144800000UL // Europe & Africa
-#define RADIO_FREQUENCY_REGION2      144390000UL // North and south America (Brazil is different)
+//W2CXM
+//#define RADIO_FREQUENCY_REGION2      144390000UL // North and south America (Brazil is different)
+#define RADIO_FREQUENCY_REGION2      147555000UL // North and south America (Brazil is different)
+//W2CXM
 //#define RADIO_FREQUENCY_REGION2      432900000UL
 //#define RADIO_FREQUENCY_REGION2      223390000UL
 
