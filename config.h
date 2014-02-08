@@ -20,6 +20,7 @@
 
 // Define local W2CXM mods - adding CW subroutines.  Undefine to go back to stock code.
 // #define CWBEACON
+// #define WIREDEBUG
 // Define local W2CXM mods - adding CW subroutines.  Undefine to go back to stock code.
 
 // --------------------------------------------------------------------------
@@ -119,10 +120,11 @@
 // watchdog timer to save more power.
 //W2CXM
 //#define APRS_PERIOD_SECONDS 120
-#define APRS_PERIOD_SECONDS 16
+#define APRS_PERIOD_SECONDS 60
 //W2CXM
 
 //W2CXM
+//#define WIREDEBUG
 #ifdef CWBEACON
 // Frequency upon which to send CW.  Pick a safe Sinplex frequency in the same band as the APRS frequency being used.
 #define CW_RADIO_FREQUENCY   147555000UL
@@ -133,6 +135,7 @@
 #define CW_ALTITUDE 100.0  // Minimum altitude in meters at which we will beacon CW (float value)                                 
 #endif /* CWBEACON */
 #define I2C_PRINT_SLAVE  88
+
 //W2CXM
 
 // Set any value here (in ms) if you want to delay the first transmission
@@ -266,8 +269,8 @@
 
 // Some radios are frequency agile. Therefore we can set the (default) frequency here:
 //W2CXM
-//#define RADIO_FREQUENCY   144390000UL
-#define RADIO_FREQUENCY   147555000UL
+#define RADIO_FREQUENCY   144390000UL
+//#define RADIO_FREQUENCY   147555000UL
 //W2CXM
 //#define RADIO_FREQUENCY   432900000UL
 //#define RADIO_FREQUENCY   223390000UL
@@ -278,8 +281,8 @@
 
 #define RADIO_FREQUENCY_REGION1      144800000UL // Europe & Africa
 //W2CXM
-//#define RADIO_FREQUENCY_REGION2      144390000UL // North and south America (Brazil is different)
-#define RADIO_FREQUENCY_REGION2      147555000UL // North and south America (Brazil is different)
+#define RADIO_FREQUENCY_REGION2      144390000UL // North and south America (Brazil is different)
+//#define RADIO_FREQUENCY_REGION2      147555000UL // North and south America (Brazil is different)
 //W2CXM
 //#define RADIO_FREQUENCY_REGION2      432900000UL
 //#define RADIO_FREQUENCY_REGION2      223390000UL

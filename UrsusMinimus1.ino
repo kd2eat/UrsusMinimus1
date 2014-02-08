@@ -109,7 +109,9 @@ void power_save()
       sleep_enable();
       power_adc_disable();
       power_spi_disable();
+#ifndef WIREDEBUG
       power_twi_disable();
+#endif
       power_timer1_disable();
       digitalWrite(LED_PIN, LOW);
       sleep_mode();    // Go to sleep
@@ -130,9 +132,11 @@ void power_save()
       delay(500);   // Give time to discharge power capacitor of GPS board   
       gpsIsOn = false;
       sleep_enable();
-      power_adc_disable();
+      power_adc_disable(); 
       power_spi_disable();
+#ifndef WIREDEBUG
       power_twi_disable();
+#endif
       power_timer1_disable();
 
       digitalWrite(LED_PIN, LOW);
@@ -206,9 +210,11 @@ void setup()
 //  buzzer_setup();
   sensors_setup();
 //W2CXM
+#ifdef WIREDEBUG
 Wire.beginTransmission(I2C_PRINT_SLAVE);
 Wire.write("In initialization\n");
 Wire.endTransmission();
+#endif WIREDEBUG
 //W2CXM
   gps_setup();
 
@@ -281,6 +287,11 @@ void loop()
   {
     c = Serial.read();
 
+#ifdef WIREDEBUG
+Wire.beginTransmission(I2C_PRINT_SLAVE);
+Wire.write(c);
+Wire.endTransmission();
+#endif
     if (gps_decode(c)) 
     {
       // We have received and decoded our location

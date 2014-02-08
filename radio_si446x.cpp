@@ -45,9 +45,10 @@ void RadioSi446x::SendCmdReceiveAnswer(int byteCountTx, int byteCountRx, const c
     
     /* There was a bug in A1 hardware that will not handle 1 byte commands. 
        It was supposedly fixed in B0 but the fix didn't make it at the last minute, so here we go again */
+#ifdef DELETED_BY_W2CXM
     if (byteCountTx == 1)
         byteCountTx++;
-    
+#endif DELETED_BY_W2CXM   
     digitalWrite(SSpin,LOW);
     char answer;   
     
@@ -127,6 +128,9 @@ void RadioSi446x::reset(void)
   SendCmdReceiveAnswer(1, 9, PART_INFO_command);
 //  Serial.println("Part info was checked");
 
+//W2CXM - Suggested that we add this delay by aadmson
+  delay(15);
+
 //divide VCXO_FREQ into its bytes; MSB first  
   unsigned int x3 = VCXO_FREQ / 0x1000000;
   unsigned int x2 = (VCXO_FREQ - x3 * 0x1000000) / 0x10000;
@@ -145,8 +149,18 @@ void RadioSi446x::reset(void)
 
 //  Serial.println("Radio ready");
  
-  const char gpio_pin_cfg_command[] = {0x13, 0x02, 0x02, 0x02, 0x02, 0x08, 0x11, 0x00}; //  Set all GPIOs LOW; Link NIRQ to CTS; Link SDO to MISO; Max drive strength
+  const char gpio_pin_cfg_command[] = {0x13, 0x02, 0x02, 0x02, 0x02, 0x08, 0x0b, 0x00}; //  Set all GPIOs LOW; Link NIRQ to CTS; Link SDO to MISO; Max drive strength
   SendCmdReceiveAnswer(8, 8, gpio_pin_cfg_command);
+
+// W2CXM - Added two more initializations per aadamson
+  const char set_global_config1[] = {0x11, 0x00, 0x01, 0x03, 0x60};
+  SendCmdReceiveAnswer(5, 1, set_global_config1);
+  // cliPrint("Setting special global Config 1 changes (see WDS)\n");
+
+  const char set_global_xo_tune_command[] = {0x11, 0x00, 0x01, 0x00, 0x00};
+  SendCmdReceiveAnswer(5, 1, set_global_xo_tune_command);
+  // cliPrint("Setting no additional capacitance on VXCO\n");
+// W2CXM ^^^^^^^^^
 
 //  Serial.println("LEDs should be switched off at this point");
   
@@ -165,6 +179,11 @@ void RadioSi446x::reset(void)
 
 void RadioSi446x::start_tx()
 {
+// W2CXM Debug - overwrite power level  
+  char set_pa_power_lvl_command[] = {0x11, 0x22, 0x01, 0x01, 0x7f};
+  SendCmdReceiveAnswer(5, 1, set_pa_power_lvl_command);
+  
+  
   char change_state_command[] = {0x34, 0x07}; //  Change to TX state
   SendCmdReceiveAnswer(2, 1, change_state_command);
 
@@ -236,11 +255,14 @@ void RadioSi446x::setFrequency(unsigned long freq)
   unsigned int m1 = (m - m2 * 0x10000) / 0x100;
   unsigned int m0 = (m - m2 * 0x10000 - m1 * 0x100); 
   // assemble parameter string
-  char set_frequency_property_command[] = {0x11, 0x40, 0x04, 0x00, n, m2, m1, m0};
+  //char set_frequency_property_command[] = {0x11, 0x40, 0x04, 0x00, n, m2, m1, m0};
   // send parameters
-  SendCmdReceiveAnswer(8, 1, set_frequency_property_command);
+  //SendCmdReceiveAnswer(8, 1, set_frequency_property_command);
   
-
+  //W2CXM - suggestions from aadamson
+  const char set_freq_control_inte[] = {0x11, 0x40, 0x08, 0x00, n, m2, m1, m0, 0x0B, 0x61, 0x20, 0xFA};
+  SendCmdReceiveAnswer(12, 1, set_freq_control_inte);
+  //W2CXM ^^^^
 }
 
 
@@ -284,7 +306,7 @@ void RadioSi446x::ptt_on()
   digitalWrite(VCXO_ENABLE_PIN, HIGH);
   reset();
   // turn on the blue LED (GPIO2) to indicate TX
-  char gpio_pin_cfg_command2[] = {0x13, 0x02, 0x02, 0x03, 0x02, 0x08, 0x11, 0x00}; //  Set GPIO2 HIGH; Link NIRQ to CTS; Link SDO to MISO; Max drive strength
+  char gpio_pin_cfg_command2[] = {0x13, 0x02, 0x02, 0x03, 0x02, 0x08, 0x0b, 0x00}; //  Set GPIO2 HIGH; Link NIRQ to CTS; Link SDO to MISO; Max drive strength
   SendCmdReceiveAnswer(8, 1, gpio_pin_cfg_command2);
 
   start_tx();
@@ -296,7 +318,7 @@ void RadioSi446x::ptt_off()
   stop_tx();
   si446x_powerlevel = 0;
   // turn off the blue LED (GPIO2)
-  char gpio_pin_cfg_command0[] = {0x13, 0x02, 0x02, 0x02, 0x02, 0x08, 0x11, 0x00}; //  Set all GPIOs LOW; Link NIRQ to CTS; Link SDO to MISO; Max drive strength
+  char gpio_pin_cfg_command0[] = {0x13, 0x02, 0x02, 0x02, 0x02, 0x08, 0x0b, 0x00}; //  Set all GPIOs LOW; Link NIRQ to CTS; Link SDO to MISO; Max drive strength
   SendCmdReceiveAnswer(8, 1, gpio_pin_cfg_command0);
 
   digitalWrite(RADIO_SDN_PIN, HIGH);  // active high = shutdown
