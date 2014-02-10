@@ -50,7 +50,7 @@
 
 // Destination callsign: APRS (with SSID=0) is usually okay.
 //#define D_CALLSIGN      "APZ"  // APZ = Experimental 
-#define D_CALLSIGN      "APEURS"  // APExxx = Telemetry devices (that's what Pecan actually is) 
+#define D_CALLSIGN      "APEUM1"  // APExxx = Telemetry devices (that's what Pecan actually is) 
 
 #define D_CALLSIGN_ID   0
 
@@ -120,7 +120,7 @@
 // watchdog timer to save more power.
 //W2CXM
 //#define APRS_PERIOD_SECONDS 120
-#define APRS_PERIOD_SECONDS 60
+#define APRS_PERIOD_SECONDS 16
 //W2CXM
 
 //W2CXM
@@ -269,8 +269,8 @@
 
 // Some radios are frequency agile. Therefore we can set the (default) frequency here:
 //W2CXM
-#define RADIO_FREQUENCY   144390000UL
-//#define RADIO_FREQUENCY   147555000UL
+//#define RADIO_FREQUENCY   144390000UL
+#define RADIO_FREQUENCY   147555000UL
 //W2CXM
 //#define RADIO_FREQUENCY   432900000UL
 //#define RADIO_FREQUENCY   223390000UL
@@ -281,8 +281,8 @@
 
 #define RADIO_FREQUENCY_REGION1      144800000UL // Europe & Africa
 //W2CXM
-#define RADIO_FREQUENCY_REGION2      144390000UL // North and south America (Brazil is different)
-//#define RADIO_FREQUENCY_REGION2      147555000UL // North and south America (Brazil is different)
+//#define RADIO_FREQUENCY_REGION2      144390000UL // North and south America (Brazil is different)
+#define RADIO_FREQUENCY_REGION2      147555000UL // North and south America (Brazil is different)
 //W2CXM
 //#define RADIO_FREQUENCY_REGION2      432900000UL
 //#define RADIO_FREQUENCY_REGION2      223390000UL
