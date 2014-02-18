@@ -20,7 +20,7 @@
 
 // Define local W2CXM mods - adding CW subroutines.  Undefine to go back to stock code.
 // #define CWBEACON
-// #define WIREDEBUG
+#define WIREDEBUG
 // Define local W2CXM mods - adding CW subroutines.  Undefine to go back to stock code.
 
 // --------------------------------------------------------------------------
@@ -124,7 +124,6 @@
 //W2CXM
 
 //W2CXM
-//#define WIREDEBUG
 #ifdef CWBEACON
 // Frequency upon which to send CW.  Pick a safe Sinplex frequency in the same band as the APRS frequency being used.
 #define CW_RADIO_FREQUENCY   147555000UL
@@ -134,8 +133,12 @@
 #define CWSTRING "W2CXM/11"
 #define CW_ALTITUDE 100.0  // Minimum altitude in meters at which we will beacon CW (float value)                                 
 #endif /* CWBEACON */
+#ifdef WIREDEBUG
 #define I2C_PRINT_SLAVE  88
-
+#define DDR_3V3  DDRC
+#define PORT_3V3 PORTC
+#define PIN_3V3  PINC2
+#endif  //WIREDEBUG
 //W2CXM
 
 // Set any value here (in ms) if you want to delay the first transmission

@@ -98,8 +98,7 @@ void power_save()
    * to drive the buzzer and timer2 to keep pwm output at its rest
    * voltage. TK: changed to conditional SLEEP_MODE_PWR_DOWN
    */
-   if (! modem_busy()) {  // Don't sleep if we're txing.
-  
+   if (! modem_busy()) {  // Don't sleep if we're txing.    
     if (newPositionStillUnknown == true)
     {
 
@@ -200,7 +199,9 @@ void setup()
   gpsIsOn = true;
   
   pinMode(ADC1_PIN, INPUT);
+#ifndef WIREDEBUG
   pinMode(ADC2_PIN, INPUT);
+#endif WIREDEBUG
   pinMode(ADC3_PIN, INPUT);
   
 #ifdef DEBUG_RESET
@@ -211,6 +212,8 @@ void setup()
   sensors_setup();
 //W2CXM
 #ifdef WIREDEBUG
+DDR_3V3 |= (1 << PIN_3V3);
+PORT_3V3 |= (1 << PIN_3V3);
 Wire.beginTransmission(I2C_PRINT_SLAVE);
 Wire.write("In initialization\n");
 Wire.endTransmission();
@@ -240,7 +243,9 @@ void loop()
 #ifdef DEBUG_MODEM
     modem_debug();
 #endif
-    aprs_send();
+//    if (! newPositionStillUnknown) {    // W2CXM.  Only transmit if we have position - prevents jamming the GPS chip.
+        aprs_send();
+//    }
 
 //    next_tx_millis = millis() + APRS_PERIOD;
     wd_counter = 0;
