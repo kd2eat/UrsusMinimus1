@@ -120,7 +120,7 @@
 // watchdog timer to save more power.
 //W2CXM
 //#define APRS_PERIOD_SECONDS 120
-#define APRS_PERIOD_SECONDS 16
+#define APRS_PERIOD_SECONDS 32
 //W2CXM
 
 //W2CXM

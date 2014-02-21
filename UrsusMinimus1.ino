@@ -60,6 +60,7 @@
 //unsigned long next_tx_millis;
 volatile int wd_counter;
 bool newPositionStillUnknown;
+bool firstPositionFound;
 //volatile boolean f_wdt=1;
 bool gpsIsOn;
 //unsigned int powerlevel;
@@ -201,7 +202,7 @@ void setup()
   pinMode(ADC1_PIN, INPUT);
 #ifndef WIREDEBUG
   pinMode(ADC2_PIN, INPUT);
-#endif WIREDEBUG
+#endif  //WIREDEBUG
   pinMode(ADC3_PIN, INPUT);
   
 #ifdef DEBUG_RESET
@@ -217,7 +218,7 @@ PORT_3V3 |= (1 << PIN_3V3);
 Wire.beginTransmission(I2C_PRINT_SLAVE);
 Wire.write("In initialization\n");
 Wire.endTransmission();
-#endif WIREDEBUG
+#endif //WIREDEBUG
 //W2CXM
   gps_setup();
 
@@ -227,6 +228,9 @@ Wire.endTransmission();
   setup_watchdog(9); // set watchdog timeout to (approximately) 8 seconds
   wd_counter = (int)(APRS_PERIOD_SECONDS / 8); // Transmit right away after switching on.
   blink3();
+  //W2CXM
+  firstPositionFound = false;
+  //W2CXM
 }
 
 void loop()
@@ -243,9 +247,9 @@ void loop()
 #ifdef DEBUG_MODEM
     modem_debug();
 #endif
-//    if (! newPositionStillUnknown) {    // W2CXM.  Only transmit if we have position - prevents jamming the GPS chip.
+    if (firstPositionFound) {    // W2CXM.  Only transmit if we have position - prevents jamming the GPS chip.
         aprs_send();
-//    }
+    }
 
 //    next_tx_millis = millis() + APRS_PERIOD;
     wd_counter = 0;
@@ -301,6 +305,7 @@ Wire.endTransmission();
     {
       // We have received and decoded our location
       newPositionStillUnknown = false;
+      firstPositionFound = true;
       
       blink3();  // Show the user that we have a valid GPS lease
       if(gps_check_satellite())
