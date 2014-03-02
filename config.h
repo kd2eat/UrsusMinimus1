@@ -272,8 +272,8 @@
 
 // Some radios are frequency agile. Therefore we can set the (default) frequency here:
 //W2CXM
-//#define RADIO_FREQUENCY   144390000UL
-#define RADIO_FREQUENCY   147555000UL
+#define RADIO_FREQUENCY   144390000UL
+//#define RADIO_FREQUENCY   147555000UL
 //W2CXM
 //#define RADIO_FREQUENCY   432900000UL
 //#define RADIO_FREQUENCY   223390000UL
@@ -284,8 +284,8 @@
 
 #define RADIO_FREQUENCY_REGION1      144800000UL // Europe & Africa
 //W2CXM
-//#define RADIO_FREQUENCY_REGION2      144390000UL // North and south America (Brazil is different)
-#define RADIO_FREQUENCY_REGION2      147555000UL // North and south America (Brazil is different)
+#define RADIO_FREQUENCY_REGION2      144390000UL // North and south America (Brazil is different)
+//#define RADIO_FREQUENCY_REGION2      147555000UL // North and south America (Brazil is different)
 //W2CXM
 //#define RADIO_FREQUENCY_REGION2      432900000UL
 //#define RADIO_FREQUENCY_REGION2      223390000UL
